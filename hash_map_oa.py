@@ -1,8 +1,8 @@
-# Name:
-# OSU Email:
+# Name: Seth Weiss
+# OSU Email: weissse@oregonstate.edu
 # Course: CS261 - Data Structures
-# Assignment:
-# Due Date:
+# Assignment: 6
+# Due Date: March 11, 2022
 # Description:
 
 
