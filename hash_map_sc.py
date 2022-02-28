@@ -81,7 +81,11 @@ class HashMap:
         """
         bucket = self.hash_function(key) % self.capacity
         chain = self.buckets[bucket]
-        chain.insert(key, value)
+        if chain.contains(key):
+            node = chain.contains(key)
+            node.value = value
+        else:
+            chain.insert(key, value)
 
     def remove(self, key: str) -> None:
         """
@@ -100,7 +104,11 @@ class HashMap:
         This method returns the number of empty buckets in the hash table.
         TODO: Write this implementation
         """
-        pass
+        empty = 0
+        for bucket in range(self.capacity):
+            if not bucket:
+                empty += 1
+        return empty
 
     def table_load(self) -> float:
         """
@@ -124,18 +132,18 @@ class HashMap:
 # BASIC TESTING
 if __name__ == "__main__":
 
-    # print("\nPDF - empty_buckets example 1")
-    # print("-----------------------------")
-    # m = HashMap(100, hash_function_1)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    # m.put('key1', 10)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    # m.put('key2', 20)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    # m.put('key1', 30)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    # m.put('key4', 40)
-    # print(m.empty_buckets(), m.size, m.capacity)
+    print("\nPDF - empty_buckets example 1")
+    print("-----------------------------")
+    m = HashMap(100, hash_function_1)
+    print(m.empty_buckets(), m.size, m.capacity)
+    m.put('key1', 10)
+    print(m.empty_buckets(), m.size, m.capacity)
+    m.put('key2', 20)
+    print(m.empty_buckets(), m.size, m.capacity)
+    m.put('key1', 30)
+    print(m.empty_buckets(), m.size, m.capacity)
+    m.put('key4', 40)
+    print(m.empty_buckets(), m.size, m.capacity)
     #
     # print("\nPDF - empty_buckets example 2")
     # print("-----------------------------")
