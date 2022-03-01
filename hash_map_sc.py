@@ -156,10 +156,18 @@ class HashMap:
 
     def get_keys(self) -> DynamicArray:
         """
+        This method returns a DynamicArray that contains all the keys stored in the hash map. The
+        order of the keys in the DA does not matter.
         TODO: Write this implementation
         """
-        pass
-
+        key_arr = DynamicArray()
+        for i in range(self.buckets.length()):
+            bucket = self.buckets[i]
+            node = bucket.head
+            while node:
+                key_arr.append(node.key)
+                node = node.next
+        return key_arr
 
 
 # BASIC TESTING
@@ -329,17 +337,17 @@ if __name__ == "__main__":
     #         result &= not m.contains_key(str(key + 1))
     #     print(capacity, result, m.size, m.capacity, round(m.table_load(), 2))
     #
-    # print("\nPDF - get_keys example 1")
-    # print("------------------------")
-    # m = HashMap(10, hash_function_2)
-    # for i in range(100, 200, 10):
-    #     m.put(str(i), str(i * 10))
-    # print(m.get_keys())
-    #
-    # m.resize_table(1)
-    # print(m.get_keys())
-    #
-    # m.put('200', '2000')
-    # m.remove('100')
-    # m.resize_table(2)
-    # print(m.get_keys())
+    print("\nPDF - get_keys example 1")
+    print("------------------------")
+    m = HashMap(10, hash_function_2)
+    for i in range(100, 200, 10):
+        m.put(str(i), str(i * 10))
+    print(m.get_keys())
+
+    m.resize_table(1)
+    print(m.get_keys())
+
+    m.put('200', '2000')
+    m.remove('100')
+    m.resize_table(2)
+    print(m.get_keys())
