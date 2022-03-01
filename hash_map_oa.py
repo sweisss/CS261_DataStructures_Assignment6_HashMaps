@@ -109,15 +109,28 @@ class HashMap:
         # quadratic probing required  i = i_initial + j**2 (where j = 1, 2, 3, 4,...)
         if self.table_load() >= 0.5:
             self.resize_table()
-        i = self.hash_function(key) % self.capacity
+        i_initial = self.hash_function(key) % self.capacity
         j = 1
-        bucket = self.buckets[i]
-        while bucket or not bucket.is_tombstone:
-            i = i + j**2
-            j += 1
-            bucket = self.buckets[i]
-        bucket.key = key
-        bucket.value = value
+        bucket = self.buckets[i_initial]
+        new_entry = HashEntry(key, value)
+        if not bucket:
+            self.buckets.set_at_index(i_initial, new_entry)
+            # print(i_initial)
+            # print(bucket)
+        else:
+            while bucket or not bucket.is_tombstone:
+                if bucket.key == key:
+                    # bucket.value = value
+                    self.buckets.set_at_index(i, new_entry)
+                    return
+                i = i_initial + j ** 2
+                j += 1
+                bucket = self.buckets[i]
+                # print(bucket)
+            self.buckets.set_at_index(i, new_entry)
+            # bucket = new_entry
+            # bucket.key = key
+            # bucket.value = value
 
     def remove(self, key: str) -> None:
         """
@@ -141,9 +154,10 @@ class HashMap:
 
     def table_load(self) -> float:
         """
+        This method returns the current hash table load factor.
         TODO: Write this implementation
         """
-        pass
+        return self.size / self.capacity
 
     def resize_table(self, new_capacity: int) -> None:
         """
