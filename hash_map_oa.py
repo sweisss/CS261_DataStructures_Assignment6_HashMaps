@@ -3,8 +3,9 @@
 # Course: CS261 - Data Structures
 # Assignment: 6
 # Due Date: March 11, 2022
-# Description:
-
+# Description:Use a dynamic array to store your hash table and implement Open Addressing
+#             with Quadratic Probing for collision resolution inside that dynamic array. Key /
+#             value pairs must be stored in the array.
 
 from a6_include import *
 
@@ -89,13 +90,14 @@ class HashMap:
         """
         TODO: Write this implementation
         """
+        # quadratic probing required
         pass
 
     def put(self, key: str, value: object) -> None:
         """
         TODO: Write this implementation
         """
-        # remember, if the load factor is greater than 0.5,
+        # remember, if the load factor is greater than or equal to 0.5,
         # resize the table before putting the new key/value pair
         #
         # quadratic probing required
