@@ -77,8 +77,12 @@ class HashMap:
         This method updates the key / value pair in the hash map. If the given key already exists in
         the hash map, its associated value must be replaced with the new value. If the given key is
         not in the hash map, a key / value pair must be added.
+        The table must be resized to double its current capacity when this method is called and the
+        current load factor of the table is greater than 0.5.
         TODO: Write this implementation
         """
+        if self.table_load() > 0.5:
+            self.resize_table()
         bucket = self.hash_function(key) % self.capacity
         chain = self.buckets[bucket]
         if chain.contains(key):
@@ -105,19 +109,24 @@ class HashMap:
         TODO: Write this implementation
         """
         empty = 0
-        for bucket in range(self.capacity):
-            if not bucket:
+        for i in range(self.capacity):
+            bucket = self.buckets[i]
+            if bucket.length() == 0:
                 empty += 1
         return empty
 
     def table_load(self) -> float:
         """
+        This method returns the current hash table load factor.
         TODO: Write this implementation
         """
-        pass
+        return self.size/self.capacity
 
     def resize_table(self, new_capacity: int) -> None:
         """
+        This method changes the capacity of the internal hash table. All existing key / value pairs
+        must remain in the new hash map, and all hash table links must be rehashed. If
+        new_capacity is less than 1, the method does nothing.
         TODO: Write this implementation
         """
         pass
@@ -127,6 +136,7 @@ class HashMap:
         TODO: Write this implementation
         """
         pass
+
 
 
 # BASIC TESTING
