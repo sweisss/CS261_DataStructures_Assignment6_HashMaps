@@ -103,9 +103,14 @@ class HashMap:
 
     def remove(self, key: str) -> None:
         """
+        This method removes the given key and its associated value from the hash map. If the key
+        is not in the hash map, the method does nothing (no exception needs to be raised).
         TODO: Write this implementation
         """
-        pass
+        bucket = self.hash_function(key) % self.capacity
+        chain = self.buckets[bucket]
+        if chain.contains(key):
+            chain.remove(key)
 
     def contains_key(self, key: str) -> bool:
         """
@@ -285,16 +290,16 @@ if __name__ == "__main__":
         print(i, m.get(str(i)), m.get(str(i)) == i * 10)
         print(i + 1, m.get(str(i + 1)), m.get(str(i + 1)) == (i + 1) * 10)
 
-    # print("\nPDF - remove example 1")
-    # print("----------------------")
-    # m = HashMap(50, hash_function_1)
-    # print(m.get('key1'))
-    # m.put('key1', 10)
-    # print(m.get('key1'))
-    # m.remove('key1')
-    # print(m.get('key1'))
-    # m.remove('key4')
-    #
+    print("\nPDF - remove example 1")
+    print("----------------------")
+    m = HashMap(50, hash_function_1)
+    print(m.get('key1'))
+    m.put('key1', 10)
+    print(m.get('key1'))
+    m.remove('key1')
+    print(m.get('key1'))
+    m.remove('key4')
+
     # print("\nPDF - resize example 1")
     # print("----------------------")
     # m = HashMap(20, hash_function_1)
