@@ -111,6 +111,7 @@ class HashMap:
         chain = self.buckets[bucket]
         if chain.contains(key):
             chain.remove(key)
+            self.size -= 1
 
     def contains_key(self, key: str) -> bool:
         """
