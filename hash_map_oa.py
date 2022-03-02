@@ -246,26 +246,10 @@ class HashMap:
         """
         keys = DynamicArray
         for i in range(self.capacity):
-            if self.buckets[i]:
-                keys.append(self.buckets[i])
+            bucket = self.buckets[i]
+            if bucket:
+                keys.append(bucket.key)
         return keys
-
-
-
-    # def quadratic_probing(self, key: str) -> int:
-    #     i_initial = self.hash_function(key) % self.capacity
-    #     j = 1
-    #     bucket = self.buckets[i_initial]
-    #     while bucket:
-    #         if bucket.key == key:
-    #             return bucket
-    #         i = i_initial + j ** 2
-    #         j += 1
-    #         if i >= self.capacity:
-    #             i = i - self.capacity
-    #         bucket = self.buckets[i]
-    #
-
 
 if __name__ == "__main__":
 
