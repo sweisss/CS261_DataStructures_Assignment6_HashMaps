@@ -156,10 +156,43 @@ class HashMap:
 
     def remove(self, key: str) -> None:
         """
+        This method removes the given key and its associated value from the hash map. If the key
+        is not in the hash map, the method does nothing.
         TODO: Write this implementation
         """
         # quadratic probing required
-        pass
+
+        # node = self.buckets[self.get(key)]
+        # if node:
+        # if self.get(key):
+        #     node = self.buckets[self.get(key)]
+        #     node.key = None
+        #     node.value = None
+        #     node.tombstone = True
+        #     self.size -= 1
+        i_initial = self.hash_function(key) % self.capacity
+        j = 1
+        bucket = self.buckets[i_initial]
+        while bucket:
+            bucket = self.buckets[i_initial]
+            while bucket:
+                if bucket.key == key:
+                    bucket.key = 0
+                    bucket.value = 0
+                    bucket._tombstone = False
+                    return
+                i = i_initial + j ** 2
+                j += 1
+                if i >= self.capacity:
+                    i = i - self.capacity
+                bucket = self.buckets[i]
+            if bucket:
+                bucket.key = 0
+                bucket.value = 0
+                bucket._tombstone = False
+                return
+            else:
+                return None
 
     def contains_key(self, key: str) -> bool:
         """
@@ -343,33 +376,33 @@ if __name__ == "__main__":
     #     result &= not m.contains_key(str(key + 1))
     # print(result)
 
-    print("\nPDF - get example 1")
-    print("-------------------")
-    m = HashMap(30, hash_function_1)
-    print(m.get('key'))
-    m.put('key1', 10)
-    print(m.get('key1'))
-
-    print("\nPDF - get example 2")
-    print("-------------------")
-    m = HashMap(150, hash_function_2)
-    for i in range(200, 300, 7):
-        m.put(str(i), i * 10)
-    print(m.size, m.capacity)
-    for i in range(200, 300, 21):
-        print(i, m.get(str(i)), m.get(str(i)) == i * 10)
-        print(i + 1, m.get(str(i + 1)), m.get(str(i + 1)) == (i + 1) * 10)
-
-    # print("\nPDF - remove example 1")
-    # print("----------------------")
-    # m = HashMap(50, hash_function_1)
-    # print(m.get('key1'))
+    # print("\nPDF - get example 1")
+    # print("-------------------")
+    # m = HashMap(30, hash_function_1)
+    # print(m.get('key'))
     # m.put('key1', 10)
     # print(m.get('key1'))
-    # m.remove('key1')
-    # print(m.get('key1'))
-    # m.remove('key4')
     #
+    # print("\nPDF - get example 2")
+    # print("-------------------")
+    # m = HashMap(150, hash_function_2)
+    # for i in range(200, 300, 7):
+    #     m.put(str(i), i * 10)
+    # print(m.size, m.capacity)
+    # for i in range(200, 300, 21):
+    #     print(i, m.get(str(i)), m.get(str(i)) == i * 10)
+    #     print(i + 1, m.get(str(i + 1)), m.get(str(i + 1)) == (i + 1) * 10)
+
+    print("\nPDF - remove example 1")
+    print("----------------------")
+    m = HashMap(50, hash_function_1)
+    print(m.get('key1'))
+    m.put('key1', 10)
+    print(m.get('key1'))
+    m.remove('key1')
+    print(m.get('key1'))
+    m.remove('key4')
+
     # print("\nPDF - resize example 1")
     # print("----------------------")
     # m = HashMap(20, hash_function_1)
