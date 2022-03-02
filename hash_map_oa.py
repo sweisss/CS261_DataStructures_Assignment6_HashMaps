@@ -106,31 +106,34 @@ class HashMap:
         # remember, if the load factor is greater than or equal to 0.5,
         # resize the table before putting the new key/value pair
         #
-        # quadratic probing required  i = i_initial + j**2 (where j = 1, 2, 3, 4,...)
+        # quadratic probing required  i = i_initial + j ** 2 (where j = 1, 2, 3, 4,...)
         if self.table_load() >= 0.5:
-            self.resize_table()
+            self.resize_table(2 * self.capacity)
         i_initial = self.hash_function(key) % self.capacity
         j = 1
         bucket = self.buckets[i_initial]
         new_entry = HashEntry(key, value)
         if not bucket:
             self.buckets.set_at_index(i_initial, new_entry)
-            # print(i_initial)
-            # print(bucket)
+            # print("set entry at " + str(i_initial))
+            self.size += 1
         else:
-            while bucket or not bucket.is_tombstone:
+            while bucket and not bucket.is_tombstone:
                 if bucket.key == key:
-                    # bucket.value = value
                     self.buckets.set_at_index(i, new_entry)
+                    # print("set entry at " + str(i))
+                    self.size += 1
                     return
                 i = i_initial + j ** 2
+                if i >= self.capacity:
+                    i = i - self.capacity
                 j += 1
+                # print("bucket: " + str(bucket) + " i: " + str(i))
                 bucket = self.buckets[i]
-                # print(bucket)
+                # print("bucket: " + str(bucket) + " i: " + str(i))
             self.buckets.set_at_index(i, new_entry)
-            # bucket = new_entry
-            # bucket.key = key
-            # bucket.value = value
+            # print("set entry at " + str(i))
+            self.size += 1
 
     def remove(self, key: str) -> None:
         """
@@ -164,7 +167,7 @@ class HashMap:
         TODO: Write this implementation
         """
         # remember to rehash non-deleted entries into new table
-        pass
+        print("Trying to resize!")
 
     def get_keys(self) -> DynamicArray:
         """
