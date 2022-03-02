@@ -119,15 +119,14 @@ class HashMap:
             self.size += 1
         else:
             while bucket and not bucket.is_tombstone:
+                i = i_initial + j ** 2
+                j += 1
                 if bucket.key == key:
                     self.buckets.set_at_index(i, new_entry)
                     # print("set entry at " + str(i))
-                    self.size += 1
                     return
-                i = i_initial + j ** 2
                 if i >= self.capacity:
                     i = i - self.capacity
-                j += 1
                 # print("bucket: " + str(bucket) + " i: " + str(i))
                 bucket = self.buckets[i]
                 # print("bucket: " + str(bucket) + " i: " + str(i))
@@ -151,9 +150,15 @@ class HashMap:
 
     def empty_buckets(self) -> int:
         """
+        This method returns the number of empty buckets in the hash table.
         TODO: Write this implementation
         """
-        pass
+        empty = 0
+        for i in range(self.capacity):
+            bucket = self.buckets[i]
+            if not bucket:
+                empty += 1
+        return empty
 
     def table_load(self) -> float:
         """
@@ -178,28 +183,28 @@ class HashMap:
 
 if __name__ == "__main__":
 
-    # print("\nPDF - empty_buckets example 1")
-    # print("-----------------------------")
-    # m = HashMap(100, hash_function_1)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    # m.put('key1', 10)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    # m.put('key2', 20)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    # m.put('key1', 30)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    # m.put('key4', 40)
-    # print(m.empty_buckets(), m.size, m.capacity)
-    #
-    # print("\nPDF - empty_buckets example 2")
-    # print("-----------------------------")
-    # # this test assumes that put() has already been correctly implemented
-    # m = HashMap(50, hash_function_1)
-    # for i in range(150):
-    #     m.put('key' + str(i), i * 100)
-    #     if i % 30 == 0:
-    #         print(m.empty_buckets(), m.size, m.capacity)
-    #
+    print("\nPDF - empty_buckets example 1")
+    print("-----------------------------")
+    m = HashMap(100, hash_function_1)
+    print(m.empty_buckets(), m.size, m.capacity)
+    m.put('key1', 10)
+    print(m.empty_buckets(), m.size, m.capacity)
+    m.put('key2', 20)
+    print(m.empty_buckets(), m.size, m.capacity)
+    m.put('key1', 30)
+    print(m.empty_buckets(), m.size, m.capacity)
+    m.put('key4', 40)
+    print(m.empty_buckets(), m.size, m.capacity)
+
+    print("\nPDF - empty_buckets example 2")
+    print("-----------------------------")
+    # this test assumes that put() has already been correctly implemented
+    m = HashMap(50, hash_function_1)
+    for i in range(150):
+        m.put('key' + str(i), i * 100)
+        if i % 30 == 0:
+            print(m.empty_buckets(), m.size, m.capacity)
+
     # print("\nPDF - table_load example 1")
     # print("--------------------------")
     # m = HashMap(100, hash_function_1)
