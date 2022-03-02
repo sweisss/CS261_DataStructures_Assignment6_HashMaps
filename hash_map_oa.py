@@ -86,8 +86,8 @@ class HashMap:
         table capacity.
         TODO: Write this implementation
         """
-        for _ in range(self.capacity):
-            self.buckets.append(None)
+        for i in range(self.capacity):
+            self.buckets[i] = None
         self.size = 0
 
     def get(self, key: str) -> object:
