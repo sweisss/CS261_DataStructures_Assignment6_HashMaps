@@ -161,15 +161,6 @@ class HashMap:
         TODO: Write this implementation
         """
         # quadratic probing required
-
-        # node = self.buckets[self.get(key)]
-        # if node:
-        # if self.get(key):
-        #     node = self.buckets[self.get(key)]
-        #     node.key = None
-        #     node.value = None
-        #     node.tombstone = True
-        #     self.size -= 1
         i_initial = self.hash_function(key) % self.capacity
         j = 1
         bucket = self.buckets[i_initial]
@@ -238,6 +229,10 @@ class HashMap:
 
     def resize_table(self, new_capacity: int) -> None:
         """
+        This method changes the capacity of the internal hash table. All existing key / value pairs
+        must remain in the new hash map, and all hash table links must be rehashed. If
+        new_capacity is less than 1 or less than the current number of elements in the map, the
+        method does nothing.
         TODO: Write this implementation
         """
         # remember to rehash non-deleted entries into new table
@@ -245,9 +240,17 @@ class HashMap:
 
     def get_keys(self) -> DynamicArray:
         """
+        This method returns a DynamicArray that contains all the keys stored in the hash map. The
+        order of the keys in the DA does not matter.
         TODO: Write this implementation
         """
-        pass
+        keys = DynamicArray
+        for i in range(self.capacity):
+            if self.buckets[i]:
+                keys.append(self.buckets[i])
+        return keys
+
+
 
     # def quadratic_probing(self, key: str) -> int:
     #     i_initial = self.hash_function(key) % self.capacity
@@ -393,15 +396,15 @@ if __name__ == "__main__":
     #     print(i, m.get(str(i)), m.get(str(i)) == i * 10)
     #     print(i + 1, m.get(str(i + 1)), m.get(str(i + 1)) == (i + 1) * 10)
 
-    print("\nPDF - remove example 1")
-    print("----------------------")
-    m = HashMap(50, hash_function_1)
-    print(m.get('key1'))
-    m.put('key1', 10)
-    print(m.get('key1'))
-    m.remove('key1')
-    print(m.get('key1'))
-    m.remove('key4')
+    # print("\nPDF - remove example 1")
+    # print("----------------------")
+    # m = HashMap(50, hash_function_1)
+    # print(m.get('key1'))
+    # m.put('key1', 10)
+    # print(m.get('key1'))
+    # m.remove('key1')
+    # print(m.get('key1'))
+    # m.remove('key4')
 
     # print("\nPDF - resize example 1")
     # print("----------------------")
@@ -431,17 +434,17 @@ if __name__ == "__main__":
     #         result &= not m.contains_key(str(key + 1))
     #     print(capacity, result, m.size, m.capacity, round(m.table_load(), 2))
     #
-    # print("\nPDF - get_keys example 1")
-    # print("------------------------")
-    # m = HashMap(10, hash_function_2)
-    # for i in range(100, 200, 10):
-    #     m.put(str(i), str(i * 10))
-    # print(m.get_keys())
-    #
-    # m.resize_table(1)
-    # print(m.get_keys())
-    #
-    # m.put('200', '2000')
-    # m.remove('100')
-    # m.resize_table(2)
-    # print(m.get_keys())
+    print("\nPDF - get_keys example 1")
+    print("------------------------")
+    m = HashMap(10, hash_function_2)
+    for i in range(100, 200, 10):
+        m.put(str(i), str(i * 10))
+    print(m.get_keys())
+
+    m.resize_table(1)
+    print(m.get_keys())
+
+    m.put('200', '2000')
+    m.remove('100')
+    m.resize_table(2)
+    print(m.get_keys())
