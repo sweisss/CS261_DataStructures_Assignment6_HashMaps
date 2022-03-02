@@ -244,7 +244,7 @@ class HashMap:
         order of the keys in the DA does not matter.
         TODO: Write this implementation
         """
-        keys = DynamicArray
+        keys = DynamicArray()
         for i in range(self.capacity):
             bucket = self.buckets[i]
             if bucket:
