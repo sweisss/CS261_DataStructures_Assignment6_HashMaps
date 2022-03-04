@@ -130,23 +130,28 @@ class HashMap:
         if self.table_load() >= 0.5:
             self.resize_table(2 * self.capacity)
         i_initial = self.hash_function(key) % self.capacity
+        i = i_initial
         j = 1
         bucket = self.buckets[i_initial]
         new_entry = HashEntry(key, value)
-        if not bucket:
+        if bucket is None:
             self.buckets.set_at_index(i_initial, new_entry)
             # print("set entry at " + str(i_initial))
             self.size += 1
         else:
             while bucket and not bucket.is_tombstone:
-                i = i_initial + j ** 2
+                if bucket.key == key:
+                    self.buckets.set_at_index(i, new_entry)
+                    # print("set entry at " + str(i))
+                    return
+                i = (i_initial + j ** 2) % self.capacity
                 j += 1
                 if bucket.key == key:
                     self.buckets.set_at_index(i, new_entry)
                     # print("set entry at " + str(i))
                     return
-                if i >= self.capacity:
-                    i = i - self.capacity
+                # if i >= self.capacity:
+                #     i = i - self.capacity
                 # print("bucket: " + str(bucket) + " i: " + str(i))
                 bucket = self.buckets[i]
                 # print("bucket: " + str(bucket) + " i: " + str(i))
@@ -244,39 +249,34 @@ class HashMap:
         more_buckets = DynamicArray()
         for _ in range(new_capacity):
             more_buckets.append(None)
-        self.size = 0
-
+        more_buckets.size = 0
+        more_buckets.capacity = new_capacity
         # rehash entries
         for index in range(keys.length()):
             key = keys[index]
             value = self.get(key)
             i_initial = self.hash_function(key) % new_capacity
             j = 1
-            bucket = self.buckets[i_initial]
+            bucket = more_buckets[i_initial]
             new_entry = HashEntry(key, value)
             if not bucket:
                 more_buckets.set_at_index(i_initial, new_entry)
-                self.size += 1
+                more_buckets.size += 1
             else:
+                # collision handling
                 while bucket:
                     i = i_initial + j ** 2
                     j += 1
                     if bucket.key == key:
                         more_buckets.set_at_index(i, new_entry)
                         return
+                    # wraparound
                     if i >= new_capacity:
                         i = i - new_capacity
                     bucket = more_buckets[i]
-                    # print("bucket: " + str(bucket) + " i: " + str(i))
                 more_buckets.set_at_index(i, new_entry)
-                # print("set entry at " + str(i))
-                self.size += 1
-
-            # chain = more_buckets[bucket]
-            # chain.insert(key, value)
-            # self.size += 1
-
-
+                more_buckets.size += 1
+        self.size = more_buckets.size
         self.capacity = new_capacity
         self.buckets = more_buckets
 
@@ -367,14 +367,14 @@ if __name__ == "__main__":
     #     m.put('str' + str(i), i * 100)
     #     if i % 25 == 24:
     #         print(m.empty_buckets(), m.table_load(), m.size, m.capacity)
-    #
-    # print("\nPDF - put example 2")
-    # print("-------------------")
-    # m = HashMap(40, hash_function_2)
-    # for i in range(50):
-    #     m.put('str' + str(i // 3), i * 100)
-    #     if i % 10 == 9:
-    #         print(m.empty_buckets(), m.table_load(), m.size, m.capacity)
+
+    print("\nPDF - put example 2")
+    print("-------------------")
+    m = HashMap(40, hash_function_2)
+    for i in range(50):
+        m.put('str' + str(i // 3), i * 100)
+        if i % 10 == 9:
+            print(m.empty_buckets(), m.table_load(), m.size, m.capacity)
 
     # print("\nPDF - contains_key example 1")
     # print("----------------------------")
@@ -432,33 +432,33 @@ if __name__ == "__main__":
     # print(m.get('key1'))
     # m.remove('key4')
 
-    print("\nPDF - resize example 1")
-    print("----------------------")
-    m = HashMap(20, hash_function_1)
-    m.put('key1', 10)
-    print(m.size, m.capacity, m.get('key1'), m.contains_key('key1'))
-    m.resize_table(30)
-    print(m.size, m.capacity, m.get('key1'), m.contains_key('key1'))
-
-    print("\nPDF - resize example 2")
-    print("----------------------")
-    m = HashMap(75, hash_function_2)
-    keys = [i for i in range(1, 1000, 13)]
-    for key in keys:
-        m.put(str(key), key * 42)
-    print(m.size, m.capacity)
-
-    for capacity in range(111, 1000, 117):
-        m.resize_table(capacity)
-
-        m.put('some key', 'some value')
-        result = m.contains_key('some key')
-        m.remove('some key')
-
-        for key in keys:
-            result &= m.contains_key(str(key))
-            result &= not m.contains_key(str(key + 1))
-        print(capacity, result, m.size, m.capacity, round(m.table_load(), 2))
+    # print("\nPDF - resize example 1")
+    # print("----------------------")
+    # m = HashMap(20, hash_function_1)
+    # m.put('key1', 10)
+    # print(m.size, m.capacity, m.get('key1'), m.contains_key('key1'))
+    # m.resize_table(30)
+    # print(m.size, m.capacity, m.get('key1'), m.contains_key('key1'))
+    #
+    # print("\nPDF - resize example 2")
+    # print("----------------------")
+    # m = HashMap(75, hash_function_2)
+    # keys = [i for i in range(1, 1000, 13)]
+    # for key in keys:
+    #     m.put(str(key), key * 42)
+    # print(m.size, m.capacity)
+    #
+    # for capacity in range(111, 1000, 117):
+    #     m.resize_table(capacity)
+    #
+    #     m.put('some key', 'some value')
+    #     result = m.contains_key('some key')
+    #     m.remove('some key')
+    #
+    #     for key in keys:
+    #         result &= m.contains_key(str(key))
+    #         result &= not m.contains_key(str(key + 1))
+    #     print(capacity, result, m.size, m.capacity, round(m.table_load(), 2))
 
     # print("\nPDF - get_keys example 1")
     # print("------------------------")
