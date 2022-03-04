@@ -136,27 +136,19 @@ class HashMap:
         new_entry = HashEntry(key, value)
         if bucket is None:
             self.buckets.set_at_index(i_initial, new_entry)
-            # print("set entry at " + str(i_initial))
             self.size += 1
         else:
             while bucket and not bucket.is_tombstone:
                 if bucket.key == key:
                     self.buckets.set_at_index(i, new_entry)
-                    # print("set entry at " + str(i))
                     return
                 i = (i_initial + j ** 2) % self.capacity
                 j += 1
                 if bucket.key == key:
                     self.buckets.set_at_index(i, new_entry)
-                    # print("set entry at " + str(i))
                     return
-                # if i >= self.capacity:
-                #     i = i - self.capacity
-                # print("bucket: " + str(bucket) + " i: " + str(i))
                 bucket = self.buckets[i]
-                # print("bucket: " + str(bucket) + " i: " + str(i))
             self.buckets.set_at_index(i, new_entry)
-            # print("set entry at " + str(i))
             self.size += 1
 
     def remove(self, key: str) -> None:
