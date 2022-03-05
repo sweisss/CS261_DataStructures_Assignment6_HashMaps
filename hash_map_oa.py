@@ -175,29 +175,7 @@ class HashMap:
             j += 1
             bucket = self.buckets[i]
         return
-        #
-        # while bucket:
-        #     bucket = self.buckets[i_initial]
-        #     while bucket:
-        #         if bucket.key == key:
-        #             # bucket.key = None
-        #             # bucket.value = None
-        #             bucket._tombstone = True
-        #             self.size -= 1
-        #             return
-        #         i = (i_initial + j ** 2) % self.capacity
-        #         j += 1
-        #         # if i >= self.capacity:
-        #         #     i = i - self.capacity
-        #         bucket = self.buckets[i]
-        #     if bucket:
-        #         # bucket.key = None
-        #         # bucket.value = None
-        #         bucket._tombstone = True
-        #         self.size -= 1
-        #         return
-        #     else:
-        #         return None
+
 
     def contains_key(self, key: str) -> bool:
         """
@@ -295,7 +273,7 @@ class HashMap:
         keys = DynamicArray()
         for i in range(self.capacity):
             bucket = self.buckets[i]
-            if bucket:
+            if bucket and bucket.is_tombstone is False:
                 keys.append(bucket.key)
         return keys
 
@@ -428,46 +406,44 @@ if __name__ == "__main__":
     #     print(i, m.get(str(i)), m.get(str(i)) == i * 10)
     #     print(i + 1, m.get(str(i + 1)), m.get(str(i + 1)) == (i + 1) * 10)
 
-    print("\nPDF - remove example 1")
-    print("----------------------")
-    m = HashMap(50, hash_function_1)
-    print(m.get('key1'), m.size)
-    m.put('key1', 10)
-    print(m.get('key1'), m.size)
-    m.remove('key1')
-    print(m.get('key1'), m.size)
-    m.remove('key4')
-
-
-
-    # print("\nPDF - resize example 1")
+    # print("\nPDF - remove example 1")
     # print("----------------------")
-    # m = HashMap(20, hash_function_1)
+    # m = HashMap(50, hash_function_1)
+    # print(m.get('key1'), m.size)
     # m.put('key1', 10)
-    # print(m.size, m.capacity, m.get('key1'), m.contains_key('key1'))
-    # m.resize_table(30)
-    # print(m.size, m.capacity, m.get('key1'), m.contains_key('key1'))
-    #
-    # print("\nPDF - resize example 2")
-    # print("----------------------")
-    # m = HashMap(75, hash_function_2)
-    # keys = [i for i in range(1, 1000, 13)]
-    # for key in keys:
-    #     m.put(str(key), key * 42)
-    # print(m.size, m.capacity)
-    #
-    # for capacity in range(111, 1000, 117):
-    #     m.resize_table(capacity)
-    #
-    #     m.put('some key', 'some value')
-    #     result = m.contains_key('some key')
-    #     m.remove('some key')
-    #
-    #     for key in keys:
-    #         result &= m.contains_key(str(key))
-    #         result &= not m.contains_key(str(key + 1))
-    #     print(capacity, result, m.size, m.capacity, round(m.table_load(), 2))
-    #
+    # print(m.get('key1'), m.size)
+    # m.remove('key1')
+    # print(m.get('key1'), m.size)
+    # m.remove('key4')
+
+    print("\nPDF - resize example 1")
+    print("----------------------")
+    m = HashMap(20, hash_function_1)
+    m.put('key1', 10)
+    print(m.size, m.capacity, m.get('key1'), m.contains_key('key1'))
+    m.resize_table(30)
+    print(m.size, m.capacity, m.get('key1'), m.contains_key('key1'))
+
+    print("\nPDF - resize example 2")
+    print("----------------------")
+    m = HashMap(75, hash_function_2)
+    keys = [i for i in range(1, 1000, 13)]
+    for key in keys:
+        m.put(str(key), key * 42)
+    print(m.size, m.capacity)
+
+    for capacity in range(111, 1000, 117):
+        m.resize_table(capacity)
+
+        m.put('some key', 'some value')
+        result = m.contains_key('some key')
+        m.remove('some key')
+
+        for key in keys:
+            result &= m.contains_key(str(key))
+            result &= not m.contains_key(str(key + 1))
+        print(capacity, result, m.size, m.capacity, round(m.table_load(), 2))
+
     # print("\nPDF - get_keys example 1")
     # print("------------------------")
     # m = HashMap(10, hash_function_2)
