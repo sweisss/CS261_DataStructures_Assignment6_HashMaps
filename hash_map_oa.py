@@ -103,10 +103,10 @@ class HashMap:
         while bucket:
             if bucket.key == key:
                 return bucket.value
-            i = i_initial + j ** 2
+            i = (i_initial + j ** 2) % self.capacity
             j += 1
-            if i >= self.capacity:
-                i = i - self.capacity
+            # if i >= self.capacity:
+            #     i = i - self.capacity
             bucket = self.buckets[i]
         if bucket:
             return bucket.value
@@ -144,9 +144,9 @@ class HashMap:
                     return
                 i = (i_initial + j ** 2) % self.capacity
                 j += 1
-                if bucket.key == key:
-                    self.buckets.set_at_index(i, new_entry)
-                    return
+                # if bucket.key == key:
+                #     self.buckets.set_at_index(i, new_entry)
+                #     return
                 bucket = self.buckets[i]
             self.buckets.set_at_index(i, new_entry)
             self.size += 1
@@ -165,19 +165,21 @@ class HashMap:
             bucket = self.buckets[i_initial]
             while bucket:
                 if bucket.key == key:
-                    bucket.key = 0
-                    bucket.value = 0
-                    bucket._tombstone = False
+                    # bucket.key = 0
+                    # bucket.value = 0
+                    bucket._tombstone = True
+                    self.size -= 1
                     return
-                i = i_initial + j ** 2
+                i = (i_initial + j ** 2) % self.capacity
                 j += 1
-                if i >= self.capacity:
-                    i = i - self.capacity
+                # if i >= self.capacity:
+                #     i = i - self.capacity
                 bucket = self.buckets[i]
             if bucket:
-                bucket.key = 0
-                bucket.value = 0
-                bucket._tombstone = False
+                # bucket.key = 0
+                # bucket.value = 0
+                bucket._tombstone = True
+                self.size -= 1
                 return
             else:
                 return None
@@ -195,10 +197,10 @@ class HashMap:
         while bucket:
             if bucket.key == key:
                 return True
-            i = i_initial + j ** 2
+            i = (i_initial + j ** 2) % self.capacity
             j += 1
-            if i >= self.capacity:
-                i = i - self.capacity
+            # if i >= self.capacity:
+            #     i = i - self.capacity
             bucket = self.buckets[i]
         if bucket:
             return bucket.key == key
@@ -360,13 +362,13 @@ if __name__ == "__main__":
     #     if i % 25 == 24:
     #         print(m.empty_buckets(), m.table_load(), m.size, m.capacity)
 
-    print("\nPDF - put example 2")
-    print("-------------------")
-    m = HashMap(40, hash_function_2)
-    for i in range(50):
-        m.put('str' + str(i // 3), i * 100)
-        if i % 10 == 9:
-            print(m.empty_buckets(), m.table_load(), m.size, m.capacity)
+    # print("\nPDF - put example 2")
+    # print("-------------------")
+    # m = HashMap(40, hash_function_2)
+    # for i in range(50):
+    #     m.put('str' + str(i // 3), i * 100)
+    #     if i % 10 == 9:
+    #         print(m.empty_buckets(), m.table_load(), m.size, m.capacity)
 
     # print("\nPDF - contains_key example 1")
     # print("----------------------------")
@@ -414,15 +416,15 @@ if __name__ == "__main__":
     #     print(i, m.get(str(i)), m.get(str(i)) == i * 10)
     #     print(i + 1, m.get(str(i + 1)), m.get(str(i + 1)) == (i + 1) * 10)
 
-    # print("\nPDF - remove example 1")
-    # print("----------------------")
-    # m = HashMap(50, hash_function_1)
-    # print(m.get('key1'))
-    # m.put('key1', 10)
-    # print(m.get('key1'))
-    # m.remove('key1')
-    # print(m.get('key1'))
-    # m.remove('key4')
+    print("\nPDF - remove example 1")
+    print("----------------------")
+    m = HashMap(50, hash_function_1)
+    print(m.get('key1'))
+    m.put('key1', 10)
+    print(m.get('key1'))
+    m.remove('key1')
+    print(m.get('key1'))
+    m.remove('key4')
 
     # print("\nPDF - resize example 1")
     # print("----------------------")
