@@ -1,6 +1,8 @@
+# Name: Seth Weiss
+# OSU Email: weissse@oregonstate.edu
 # Course: CS261 - Data Structures
 # Assignment: 6
-# Description: 'Helper' data structures
+# Description: 'Helper' data structures for the two hash map files.
 
 
 class SLNode:

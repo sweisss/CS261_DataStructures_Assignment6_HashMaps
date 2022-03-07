@@ -107,15 +107,7 @@ class HashMap:
                 return bucket.value
             i = (i_initial + j ** 2) % self.capacity
             j += 1
-            # if i >= self.capacity:
-            #     i = i - self.capacity
             bucket = self.buckets[i]
-        # if bucket:
-        #     if bucket.is_tombstone:
-        #         return None
-        #     return bucket.value
-        # else:
-        #     return None
 
     def put(self, key: str, value: object) -> None:
         """
@@ -148,9 +140,6 @@ class HashMap:
                     return
                 i = (i_initial + j ** 2) % self.capacity
                 j += 1
-                # if bucket.key == key:
-                #     self.buckets.set_at_index(i, new_entry)
-                #     return
                 bucket = self.buckets[i]
             self.buckets.set_at_index(i, new_entry)
             self.size += 1
@@ -176,7 +165,6 @@ class HashMap:
             bucket = self.buckets[i]
         return
 
-
     def contains_key(self, key: str) -> bool:
         """
         This method returns True if the given key is in the hash map, otherwise it returns False. An
@@ -192,8 +180,6 @@ class HashMap:
                 return True
             i = (i_initial + j ** 2) % self.capacity
             j += 1
-            # if i >= self.capacity:
-            #     i = i - self.capacity
             bucket = self.buckets[i]
         if bucket:
             return bucket.key == key
@@ -228,7 +214,6 @@ class HashMap:
         TODO: Write this implementation
         """
         # remember to rehash non-deleted entries into new table
-        # setup
         if new_capacity < 1 or new_capacity < self.size:
             return
         temp_hm = HashMap(new_capacity, self.hash_function)
@@ -239,42 +224,6 @@ class HashMap:
         self.buckets = temp_hm.buckets
         self.size = temp_hm.size
         self.capacity = temp_hm.capacity
-
-        # # setup
-        # if new_capacity < 1 or new_capacity < self.size:
-        #     return
-        # keys = self.get_keys()
-        # more_buckets = DynamicArray()
-        # for _ in range(new_capacity):
-        #     more_buckets.append(None)
-        # more_buckets.size = 0
-        # more_buckets.capacity = new_capacity
-        # # rehash entries
-        # for index in range(keys.length()):
-        #     key = keys[index]
-        #     value = self.get(key)
-        #     i_initial = self.hash_function(key) % new_capacity
-        #     j = 1
-        #     bucket = more_buckets[i_initial]
-        #     new_entry = HashEntry(key, value)
-        #     if not bucket:
-        #         more_buckets.set_at_index(i_initial, new_entry)
-        #         more_buckets.size += 1
-        #     else:
-        #         # collision handling
-        #         while bucket:
-        #             if bucket.key == key:
-        #                 more_buckets.set_at_index(i, new_entry)
-        #                 return
-        #             i = (i_initial + j ** 2) % new_capacity
-        #             j += 1
-        #             bucket = more_buckets[i]
-        #         more_buckets.set_at_index(i, new_entry)
-        #         more_buckets.size += 1
-        # # reassign values back to self
-        # self.size = more_buckets.size
-        # self.capacity = new_capacity
-        # self.buckets = more_buckets
 
     def get_keys(self) -> DynamicArray:
         """
